@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this benchmark or codebase in your research, please cite it as below."
+authors:
+  - family-names: "thinktinkergreen"
+    email: "techamit109@gmail.com"
+title: "adam-fair-tuning: Empirical Reproducibility and Fair Optimizer Benchmarking from Adam by Hand to Scaling Laws"
+version: 1.0.0
+date-released: 2026-10-19
+url: "https://github.com/thinkTinkerGreen/adam_optimiser"
+license: MIT

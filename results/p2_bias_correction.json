@@ -1,0 +1,34 @@
+{
+  "headline_conclusion": "Within the first 20 steps, the difference between bias correction on vs off never stops mattering for beta2=0.999. The ratio peaks at step 12 at 6.57x and remains at 6.24x at step 20.",
+  "peak_ratio": {
+    "closed_form": 6.56852025246924,
+    "simulation_noisy_mean": 6.56851963823743,
+    "t": 12
+  },
+  "r_at_1": 3.1622776601683773,
+  "r_at_20": 6.2409282362201015,
+  "sim_cross_check_0_999": {
+    "closed_form_1pct": 3925,
+    "closed_form_5pct": 2375,
+    "simulation_1pct": 3925,
+    "simulation_5pct": 2375
+  },
+  "t_star_table": {
+    "0.95": {
+      "t_star_1pct": 76,
+      "t_star_5pct": 43
+    },
+    "0.98": {
+      "t_star_1pct": 195,
+      "t_star_5pct": 118
+    },
+    "0.99": {
+      "t_star_1pct": 391,
+      "t_star_5pct": 237
+    },
+    "0.999": {
+      "t_star_1pct": 3925,
+      "t_star_5pct": 2375
+    }
+  }
+}
