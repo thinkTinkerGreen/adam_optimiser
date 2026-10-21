@@ -30,6 +30,9 @@ jobs:
       - name: Set up Python
         run: uv python install 3.12
 
+      - name: Sync dependencies
+        run: uv sync --frozen --extra dev
+
       - name: Run Ruff Linter
         run: uv run ruff check .
 
@@ -53,7 +56,7 @@ jobs:
         run: uv python install 3.12
 
       - name: Sync dependencies
-        run: uv sync --frozen
+        run: uv sync --frozen --extra dev
 
       - name: Run Mypy
         run: uv run mypy src/
@@ -79,7 +82,7 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: Sync dependencies
-        run: uv sync --frozen
+        run: uv sync --frozen --extra dev
 
       - name: Run Pytest with Coverage
         run: uv run pytest tests/ --cov=src/adamlab --cov-report=term-missing --cov-report=xml --cov-fail-under=85
@@ -101,7 +104,7 @@ jobs:
         run: uv python install 3.12
 
       - name: Sync dependencies
-        run: uv sync --frozen
+        run: uv sync --frozen --extra dev
 
       - name: Run Smoke Test Pipeline
         run: uv run python -m scripts.smoke_test
@@ -119,6 +122,9 @@ jobs:
 
       - name: Set up Python
         run: uv python install 3.12
+
+      - name: Sync dependencies
+        run: uv sync --frozen --extra dev
 
       - name: Verify Notebook Output Stripped
         run: uv run nbstripout --verify notebooks/adam_by_hand_tuning.ipynb
@@ -140,7 +146,7 @@ jobs:
         run: uv python install 3.12
 
       - name: Sync dependencies
-        run: uv sync --frozen
+        run: uv sync --frozen --extra dev
 
       - name: Re-render README
         run: uv run python -m scripts.render_readme
