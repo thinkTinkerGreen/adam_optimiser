@@ -19,9 +19,29 @@ def load_results_context(results_dir: str | Path | None = None) -> dict[str, Any
     res_path = Path(results_dir)
 
     def read_json_or_none(filename: str) -> dict[str, Any] | None:
+        # 1. Primary path (e.g. Drive if set)
         p = res_path / filename
         if p.exists():
             return load_json(p)
+        # 2. Local fallback in repository
+        fallback = Path("results") / filename
+        if fallback.exists():
+            return load_json(fallback)
+        # 3. Dynamic run for fast mathematical verifications if missing
+        if filename == "p1_adam_by_hand.json":
+            try:
+                from experiments.p1_adam_by_hand import run_part1
+
+                return run_part1(results_dir=res_path)
+            except Exception:
+                pass
+        elif filename == "p2_bias_correction.json":
+            try:
+                from experiments.p2_bias_correction import run_part2
+
+                return run_part2(results_dir=res_path)
+            except Exception:
+                pass
         return None
 
     p1 = read_json_or_none("p1_adam_by_hand.json")
@@ -34,6 +54,8 @@ def load_results_context(results_dir: str | Path | None = None) -> dict[str, Any
     # Load parity ledger CSV
     ledger_entries = []
     ledger_file = res_path / "parity_ledger.csv"
+    if not ledger_file.exists():
+        ledger_file = Path("results") / "parity_ledger.csv"
     if ledger_file.exists():
         with open(ledger_file, encoding="utf-8") as f:
             reader = csv.DictReader(f)
