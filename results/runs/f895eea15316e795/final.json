@@ -1,0 +1,43 @@
+{
+  "diverged": false,
+  "env_metadata": {
+    "cuda_version": null,
+    "device_name": "cpu",
+    "git_sha": "1911cdeed680bf0758f628354d4792cccf3747be",
+    "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
+    "python_version": "3.13.16",
+    "torch_version": "2.11.0+cpu"
+  },
+  "eval_losses": {
+    "step_200_test": 2.4683547430553063,
+    "step_200_tune_val": 2.4796307954667767,
+    "step_300_test": 2.4377664244133896,
+    "step_300_tune_val": 2.451738202065469
+  },
+  "final_train_loss": 2.4381103515625,
+  "run_id": "f895eea15316e795",
+  "spec": {
+    "batch_size": 32,
+    "context_length": 128,
+    "decay_steps": null,
+    "depth": 4,
+    "device": "cpu",
+    "eval_steps": [
+      200,
+      300
+    ],
+    "experiment": "p5_sweep",
+    "f_min": 0.1,
+    "grad_clip": 1.0,
+    "log_ratios": false,
+    "lr": 0.0001220703125,
+    "schedule": "cosine",
+    "seed": 2,
+    "total_steps": 300,
+    "use_synthetic": false,
+    "warmup_steps": 30,
+    "weight_decay": 0.0,
+    "width": 256
+  },
+  "summary_metrics": {}
+}

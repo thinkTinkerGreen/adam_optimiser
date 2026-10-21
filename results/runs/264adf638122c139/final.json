@@ -1,0 +1,40 @@
+{
+  "diverged": false,
+  "env_metadata": {
+    "cuda_version": "13.0",
+    "device_name": "Tesla T4",
+    "git_sha": "1911cdeed680bf0758f628354d4792cccf3747be",
+    "platform": "Linux-6.6.122+-x86_64-with-glibc2.39",
+    "python_version": "3.13.15",
+    "torch_version": "2.11.0+cu130"
+  },
+  "eval_losses": {
+    "step_200_test": 2.197687930819909,
+    "step_200_tune_val": 2.1792291231735703
+  },
+  "final_train_loss": 1.8960659503936768,
+  "run_id": "264adf638122c139",
+  "spec": {
+    "batch_size": 32,
+    "context_length": 128,
+    "decay_steps": 60,
+    "depth": 4,
+    "device": "cuda",
+    "eval_steps": [
+      200
+    ],
+    "experiment": "p4_wsd300_tune",
+    "f_min": 0.1,
+    "grad_clip": 1.0,
+    "log_ratios": false,
+    "lr": 0.00034526698300124393,
+    "schedule": "wsd",
+    "seed": 1,
+    "total_steps": 300,
+    "use_synthetic": false,
+    "warmup_steps": 30,
+    "weight_decay": 0.0,
+    "width": 512
+  },
+  "summary_metrics": {}
+}

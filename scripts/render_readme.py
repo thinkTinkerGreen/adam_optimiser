@@ -74,6 +74,7 @@ def render_readme(
 
     # Custom filters
     env.filters["scinot"] = lambda val: f"{val:.2e}" if isinstance(val, (int, float)) else str(val)
+    env.filters["dp2"] = lambda val: f"{val:.2f}" if isinstance(val, (int, float)) else str(val)
     env.filters["dp4"] = lambda val: f"{val:.4f}" if isinstance(val, (int, float)) else str(val)
     env.filters["dp6"] = lambda val: f"{val:.6f}" if isinstance(val, (int, float)) else str(val)
 
