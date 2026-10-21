@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import os
 from pathlib import Path
 from typing import Any
 
@@ -11,8 +12,10 @@ import jinja2
 from adamlab.io import load_json
 
 
-def load_results_context(results_dir: str | Path = "results") -> dict[str, Any]:
+def load_results_context(results_dir: str | Path | None = None) -> dict[str, Any]:
     """Load and structure all experiment outputs into template context."""
+    if results_dir is None:
+        results_dir = os.environ.get("ADAMLAB_RESULTS_DIR", "results")
     res_path = Path(results_dir)
 
     def read_json_or_none(filename: str) -> dict[str, Any] | None:
@@ -50,7 +53,7 @@ def load_results_context(results_dir: str | Path = "results") -> dict[str, Any]:
 def render_readme(
     template_path: str | Path = "README.template.md",
     output_path: str | Path = "README.md",
-    results_dir: str | Path = "results",
+    results_dir: str | Path | None = None,
 ) -> str:
     """Render the Jinja2 template and save the final README.md."""
     tmpl_path = Path(template_path)

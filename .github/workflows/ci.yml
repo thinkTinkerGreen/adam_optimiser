@@ -121,7 +121,7 @@ jobs:
         run: uv python install 3.12
 
       - name: Verify Notebook Output Stripped
-        run: uv run nbstripout --verify notebooks/colab_runner.ipynb
+        run: uv run nbstripout --verify notebooks/adam_by_hand_tuning.ipynb
 
   readme-sync:
     name: README Consistency Check

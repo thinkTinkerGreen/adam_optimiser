@@ -61,7 +61,7 @@ make p5      # Part 5: Learning rate sweeps at widths 256, 512, 1024 and width-4
 ```
 
 ### Running on Google Colab
-1. Open `notebooks/colab_runner.ipynb` in Google Colab.
+1. Open `notebooks/adam_by_hand_tuning.ipynb` in Google Colab.
 2. Select a GPU runtime (e.g. Free Tier T4).
 3. Mount Google Drive to persist intermediate checkpoint logs and results.
 4. Execute cells sequentially. Each completed run writes atomically to Drive, making interrupted sessions immediately resumable.

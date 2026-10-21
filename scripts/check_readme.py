@@ -10,9 +10,13 @@ from scripts.render_readme import load_results_context
 
 
 def check_rendered_readme(
-    readme_path: str | Path = "README.md", results_dir: str | Path = "results"
+    readme_path: str | Path = "README.md", results_dir: str | Path | None = None
 ) -> list[str]:
     """Audit the rendered README.md for unrendered template tags and consistency."""
+    if results_dir is None:
+        import os
+
+        results_dir = os.environ.get("ADAMLAB_RESULTS_DIR", "results")
     path = Path(readme_path)
     if not path.exists():
         return [f"README file does not exist: {path}"]

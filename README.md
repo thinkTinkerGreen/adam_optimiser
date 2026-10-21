@@ -229,7 +229,7 @@ adam_optimiser/
 │   └── io.py                       # Atomic serialization, run ID hashing, manifest
 ├── experiments/                    # Experiment entrypoints (Parts 1–5, Stretch S1)
 ├── scripts/                        # Automation: build matrix, make figures, render/check README
-├── notebooks/colab_runner.ipynb    # Google Colab T4 GPU execution notebook
+├── notebooks/adam_by_hand_tuning.ipynb # Google Colab T4 GPU execution notebook
 ├── tests/                          # 40+ unit and property tests (≥90% coverage)
 ├── results/                        # Serialized JSON outputs and parity ledger
 ├── figures/                        # Generated vector (SVG) and raster (PNG) figures

@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from experiments.p2_bias_correction import run_part2
 
 
 def make_all_figures(
-    results_dir: str | Path = "results", figures_dir: str | Path = "figures"
+    results_dir: str | Path | None = None, figures_dir: str | Path = "figures"
 ) -> None:
+    if results_dir is None:
+        results_dir = os.environ.get("ADAMLAB_RESULTS_DIR", "results")
     res_path = Path(results_dir)
     fig_path = Path(figures_dir)
     fig_path.mkdir(parents=True, exist_ok=True)

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import os
 from pathlib import Path
 from typing import Any
 
@@ -103,10 +104,12 @@ def evaluate_on_test(
 def run_part4(
     device: str = "cpu",
     use_synthetic: bool = False,
-    results_dir: str | Path = "results",
+    results_dir: str | Path | None = None,
     figures_dir: str | Path = "figures",
 ) -> dict[str, Any]:
     """Execute Part 4 literal and matched-budget comparisons under tuning parity."""
+    if results_dir is None:
+        results_dir = os.environ.get("ADAMLAB_RESULTS_DIR", "results")
     res_dir = Path(results_dir)
     fig_dir = Path(figures_dir)
     res_dir.mkdir(parents=True, exist_ok=True)
@@ -427,4 +430,22 @@ def run_part4(
 
 
 if __name__ == "__main__":
-    run_part4()
+    import argparse
+
+    import torch
+
+    parser = argparse.ArgumentParser(description="Part 4: Cosine vs WSD Comparison")
+    parser.add_argument(
+        "--device", default="cuda" if torch.cuda.is_available() else "cpu", help="Compute device"
+    )
+    parser.add_argument("--synthetic", action="store_true", help="Use synthetic dataset")
+    parser.add_argument("--results-dir", default=None, help="Directory to store results")
+    parser.add_argument("--figures-dir", default="figures", help="Directory to store figures")
+    args = parser.parse_args()
+
+    run_part4(
+        device=args.device,
+        use_synthetic=args.synthetic,
+        results_dir=args.results_dir,
+        figures_dir=args.figures_dir,
+    )
