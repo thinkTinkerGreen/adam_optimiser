@@ -55,7 +55,7 @@ make smoke
 ### 1.1 Specification and Initial Values
 - Weight: $w_0 = 1.0$
 - Learning rate: $\eta = 0.01$
-- Hyperparameters: $\beta_1 = 0.9$, $\beta_2 = 0.999$, $\varepsilon = 10^{-8}$, $\text{weight\_decay} = 0$, $\text{amsgrad} = \text{False}$
+- Hyperparameters: $\beta_1 = 0.9$, $\beta_2 = 0.999$, $\varepsilon = 10^{-8}$, `weight_decay = 0`, `amsgrad = False`
 - Gradient sequence: $g_1 = +0.1, g_2 = -0.2, g_3 = +0.3, g_4 = -0.4, g_5 = +0.5$
 
 ### 1.2 Mathematical Derivations & Analytical Updates

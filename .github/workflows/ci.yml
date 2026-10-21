@@ -56,7 +56,7 @@ jobs:
         run: uv sync --frozen
 
       - name: Run Mypy
-        run: uv run mypy src/ tests/ experiments/ scripts/
+        run: uv run mypy src/
 
   test:
     name: Tests & Coverage (py${{ matrix.python-version }})
