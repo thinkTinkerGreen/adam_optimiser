@@ -1,0 +1,96 @@
+{
+  "fitted_vertices": {
+    "1024": {
+      "lr_star": 0.0004918600824594777
+    },
+    "256": {
+      "lr_star": 0.0031489558525349274
+    },
+    "512": {
+      "lr_star": 0.0012891905101787954
+    }
+  },
+  "hypotheses_status": {
+    "H3_optimal_lr_decreases_with_width": true,
+    "H4_slope_between_minus_one_and_zero": false,
+    "H5_loss_improves_with_width": false
+  },
+  "minima_table": {
+    "1024": {
+      "basin_half_width_log2": 0.5,
+      "ci_95": [
+        0.000244140625,
+        0.0009765625
+      ],
+      "ci_95_log2": [
+        -12.0,
+        -10.0
+      ],
+      "fitted_x_star": -10.989464403517566,
+      "grid_argmin_lr": 0.00048828125,
+      "held_out_test_mean": 2.0002871665560416,
+      "held_out_test_se": 0.0034251370479880523,
+      "is_fallback": false,
+      "lr_star": 0.0004918600824594777,
+      "snapped_lr": 0.00048828125,
+      "width": 1024
+    },
+    "256": {
+      "basin_half_width_log2": 0.5,
+      "ci_95": [
+        0.001953125,
+        0.0078125
+      ],
+      "ci_95_log2": [
+        -9.0,
+        -7.0
+      ],
+      "fitted_x_star": -8.310910753220963,
+      "grid_argmin_lr": 0.00390625,
+      "held_out_test_mean": 1.9926182323153612,
+      "held_out_test_se": 0.002766343873109245,
+      "is_fallback": false,
+      "lr_star": 0.0031489558525349274,
+      "snapped_lr": 0.0027621358640099515,
+      "width": 256
+    },
+    "512": {
+      "basin_half_width_log2": 0.25,
+      "ci_95": [
+        0.0006905339660024879,
+        0.0027621358640099515
+      ],
+      "ci_95_log2": [
+        -10.5,
+        -8.5
+      ],
+      "fitted_x_star": -9.59931881089166,
+      "grid_argmin_lr": 0.0013810679320049757,
+      "held_out_test_mean": 1.958201878836362,
+      "held_out_test_se": 0.007123441782479785,
+      "is_fallback": false,
+      "lr_star": 0.0012891905101787954,
+      "snapped_lr": 0.0013810679320049757,
+      "width": 512
+    }
+  },
+  "scaling_law": {
+    "basin_half_width_1024_log2": 0.5,
+    "ci_contains_minus_one": false,
+    "confidence_label": "moderate",
+    "constrained_1_over_w_lr_4096": 0.00012296502061486943,
+    "intercept_a": 2.420260103791335,
+    "practical_trial_range": [
+      3.8867886913794976e-05,
+      0.0001554715476551799
+    ],
+    "pred_log2_4096": -13.651061797988302,
+    "pred_lr_4096": 7.773577382758995e-05,
+    "slope_b": -1.3392768251483032,
+    "slope_b_ci_95": [
+      -1.455062429467208,
+      -1.2956095220582744
+    ],
+    "w95_prediction_interval_log2": 0.3983091028654133
+  }
+}

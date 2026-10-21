@@ -1,0 +1,42 @@
+{
+  "family_tw_5pct": {
+    "embed": 300.0,
+    "fc1": 193.0,
+    "fc2": 300.0,
+    "head": 300.0,
+    "ln": 300.0,
+    "proj": 300.0,
+    "qkv": 300.0
+  },
+  "global_tw_5pct": 300,
+  "mean_warmup_correlation": 0.9241744219546218,
+  "median_tw_5pct": 300,
+  "peak_lr_used": 0.0012891905101787954,
+  "tensor_tw_sample": {
+    "blocks.0.attn.qkv.weight": {
+      "theta_10pct": 300,
+      "theta_2pct": 300,
+      "theta_5pct": 300
+    },
+    "blocks.0.ln1.bias": {
+      "theta_10pct": 300,
+      "theta_2pct": 300,
+      "theta_5pct": 300
+    },
+    "blocks.0.ln1.weight": {
+      "theta_10pct": 300,
+      "theta_2pct": 300,
+      "theta_5pct": 300
+    },
+    "pos_emb.weight": {
+      "theta_10pct": 300,
+      "theta_2pct": 300,
+      "theta_5pct": 300
+    },
+    "tok_emb.weight": {
+      "theta_10pct": 300,
+      "theta_2pct": 300,
+      "theta_5pct": 300
+    }
+  }
+}

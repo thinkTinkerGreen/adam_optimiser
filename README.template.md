@@ -59,9 +59,17 @@ make smoke
 - Gradient sequence: $g_1 = +0.1, g_2 = -0.2, g_3 = +0.3, g_4 = -0.4, g_5 = +0.5$
 
 ### 1.2 Mathematical Derivations & Analytical Updates
-$$m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t, \quad v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$$
-$$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}$$
-$$\text{step}_t = \frac{\eta \cdot \hat{m}_t}{\sqrt{\hat{v}_t} + \varepsilon}, \quad w_t = w_{t-1} - \text{step}_t$$
+$$
+m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t, \quad v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2
+$$
+
+$$
+\hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}
+$$
+
+$$
+\text{step}_t = \frac{\eta \cdot \hat{m}_t}{\sqrt{\hat{v}_t} + \varepsilon}, \quad w_t = w_{t-1} - \text{step}_t
+$$
 
 ### 1.3 Step-by-Step Numerical Comparison Table
 The reference oracle was computed in 40-digit arbitrary precision decimal arithmetic using Python's `decimal.Decimal` module:
@@ -92,14 +100,26 @@ The reference oracle was computed in 40-digit arbitrary precision decimal arithm
 ## Part 2: Bias Correction Off vs. On
 
 ### 2.1 First 20 Steps Simulation
-When bias correction is disabled, the update rule becomes $\text{step}_t = \frac{\eta \cdot m_t}{\sqrt{v_t} + \varepsilon}$.
+When bias correction is disabled, the update rule becomes:
+
+$$
+\text{step}_t = \frac{\eta \cdot m_t}{\sqrt{v_t} + \varepsilon}
+$$
+
 Under constant gradient $g$, the uncorrected to corrected step magnitude ratio follows:
-$$r_t = \frac{|\Delta w_{\text{noBC}}|}{|\Delta w_{\text{BC}}|} = \frac{1 - \beta_1^t}{\sqrt{1 - \beta_2^t}}$$
+
+$$
+r_t = \frac{|\Delta w_{\text{noBC}}|}{|\Delta w_{\text{BC}}|} = \frac{1 - \beta_1^t}{\sqrt{1 - \beta_2^t}}
+$$
 
 ![Part 2 First 20 Steps](figures/p2_first20.png)
 
 ### 2.2 Analytical & Empirical $t^*$ Horizon Table
-Threshold $t^*(\theta)$ defines the smallest step such that for **all** $t \ge t^*$ through horizon $H = 20,000$, $\left| \frac{|\Delta w_{\text{noBC}}|}{|\Delta w_{\text{BC}}|} - 1 \right| < \theta$:
+Threshold $t^*(\theta)$ defines the smallest step such that for **all** $t \ge t^*$ through horizon $H = 20{,}000$:
+
+$$
+\left| \frac{|\Delta w_{\text{noBC}}|}{|\Delta w_{\text{BC}}|} - 1 \right| < \theta
+$$
 
 | $\beta_2$ Value | Closed Form $t^*(5\%)$ | Simulation $t^*(5\%)$ | Closed Form $t^*(1\%)$ | Simulation $t^*(1\%)$ | Peak Ratio ($t=12$) |
 | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -117,8 +137,18 @@ Threshold $t^*(\theta)$ defines the smallest step such that for **all** $t \ge t
 
 ### 3.1 Empirical Metric Definition
 For every parameter tensor $i$ at step $s$:
-$$r_i(s) = \frac{\|w_i(s) - w_i(s-1)\|_2}{\|w_i(s-1)\|_2}$$
-Warmup termination step $t_{w,i}(5\%)$ is the first step where moving-average discrepancy $d_i(s) = \frac{|r_i^{\text{W30}}(s) - r_i^{\text{W0}}(s)|}{r_i^{\text{W0}}(s)} < 5\%$ for all remaining steps.
+
+$$
+r_i(s) = \frac{\|w_i(s) - w_i(s-1)\|_2}{\|w_i(s-1)\|_2}
+$$
+
+Warmup termination step $t_{w,i}(5\%)$ is the first step where moving-average discrepancy satisfies:
+
+$$
+d_i(s) = \frac{|r_i^{\text{W30}}(s) - r_i^{\text{W0}}(s)|}{r_i^{\text{W0}}(s)} < 5\%
+$$
+
+for all remaining steps.
 
 {% if p3 %}
 ![Part 3 Family Ratios](figures/p3_ratio_by_family.png)

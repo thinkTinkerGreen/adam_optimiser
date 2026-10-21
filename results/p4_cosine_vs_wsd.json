@@ -1,0 +1,62 @@
+{
+  "hypotheses_status": {
+    "H1_cosine_lower_in_literal_stop": true,
+    "H2_matched_budget_statistical_tie": false
+  },
+  "keep_recommendation": {
+    "chosen_schedule": "WSD",
+    "rationale": "WSD demonstrated decisive loss advantage at matched budget."
+  },
+  "literal_comparison_d1": {
+    "cos300_mean": 2.0819342431098713,
+    "cos300_se": 0.013109813688344265,
+    "cos300_test_losses": [
+      2.057804112045691,
+      2.102882113714032,
+      2.085116503569891
+    ],
+    "cos300_tuned_lr": 0.001953125,
+    "paired_stats": {
+      "abs_diff": 0.021875976375633915,
+      "ci_lower": -0.04011361777778023,
+      "ci_upper": -0.0036383349734875926,
+      "mean_diff": -0.021875976375633915,
+      "se": 0.009304919082727715
+    },
+    "verdict": "COSINE",
+    "wsd300_mean": 2.103810219485505,
+    "wsd300_se": 0.012836938410016863,
+    "wsd300_test_losses": [
+      2.0929773551862083,
+      2.129384720777124,
+      2.089068582493183
+    ],
+    "wsd300_tuned_lr": 0.001953125
+  },
+  "matched_budget_comparison_d2": {
+    "cos200_mean": 2.086150924501591,
+    "cos200_se": 0.006249583278146537,
+    "cos200_test_losses": [
+      2.0762608875226483,
+      2.0844768607383752,
+      2.0977150252437484
+    ],
+    "cos200_tuned_lr": 0.001953125,
+    "paired_stats": {
+      "abs_diff": 0.031841191942555934,
+      "ci_lower": 0.013946423091751769,
+      "ci_upper": 0.049735960793360096,
+      "mean_diff": 0.031841191942555934,
+      "se": 0.009129984107553146
+    },
+    "verdict": "WSD",
+    "wsd200_mean": 2.0543097325590347,
+    "wsd200_se": 0.01069943988227244,
+    "wsd200_test_losses": [
+      2.034285780756673,
+      2.0708573841747544,
+      2.0577860327456765
+    ],
+    "wsd200_tuned_lr": 0.001953125
+  }
+}

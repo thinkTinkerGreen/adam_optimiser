@@ -15,10 +15,10 @@ An empirical research laboratory investigating Adam optimizer dynamics from firs
 | :--- | :--- | :--- |
 | **1. Adam by hand vs. PyTorch agreement** | **FP64 max error:** `7.77e-16`<br>**FP32 max error:** `3.83e-08` | [Part 1: Adam by Hand](#part-1-adam-by-hand-1-weight-5-gradients) |
 | **2. Bias correction difference threshold ($t^*$, $\beta_2=0.999$)** | **5% threshold:** `2375` steps<br>**1% threshold:** `3925` steps<br>*(Does **not** vanish within 20 steps; peaks at step 12 at 6.57×)* | [Part 2: Bias Correction Off vs. On](#part-2-bias-correction-off-vs-on) |
-| **3. Step where warmup stops changing update ratio ($t_w$)** | **Global $t_w$ (5% threshold):** Step `NOT RUN`<br>**Median $t_w$:** Step `NOT RUN` | [Part 3: Layer-wise Update Ratio](#part-3-layer-wise-update-to-weight-ratio-and-warmup) |
-| **4. Cosine vs. WSD at step 200 & KEEP decision** | **Literal Stop (Step 200 of 300):** Cosine = `NOT RUN` vs. WSD = `NOT RUN` nats<br>**Matched Budget ($T=200$):** `NOT RUN`<br>**Recommendation:** Keep **`NOT RUN`** | [Part 4: Cosine vs. WSD](#part-4-cosine-vs-wsd-literal--matched-budget) |
-| **5. The three LR minima (Widths 256 / 512 / 1024)** | **Width 256:** `NOT RUN`<br>**Width 512:** `NOT RUN`<br>**Width 1024:** `NOT RUN` | [Part 5: LR Sweeps](#part-5-learning-rate-sweep-across-widths-and-width-4096-recommendation) |
-| **6. Learning rate at width 4096 + confidence** | **Predicted LR:** `NOT RUN` (1/width constrained: `NOT RUN`)<br>**Confidence:** `NOT RUN` (slope $b = NOT RUN$) | [Part 5: Extrapolation](#part-5-learning-rate-sweep-across-widths-and-width-4096-recommendation) |
+| **3. Step where warmup stops changing update ratio ($t_w$)** | **Global $t_w$ (5% threshold):** Step `300`<br>**Median $t_w$:** Step `300` | [Part 3: Layer-wise Update Ratio](#part-3-layer-wise-update-to-weight-ratio-and-warmup) |
+| **4. Cosine vs. WSD at step 200 & KEEP decision** | **Literal Stop (Step 200 of 300):** Cosine = `2.0819` vs. WSD = `2.1038` nats<br>**Matched Budget ($T=200$):** `WSD`<br>**Recommendation:** Keep **`WSD`** | [Part 4: Cosine vs. WSD](#part-4-cosine-vs-wsd-literal--matched-budget) |
+| **5. The three LR minima (Widths 256 / 512 / 1024)** | **Width 256:** `3.15e-03`<br>**Width 512:** `1.29e-03`<br>**Width 1024:** `4.92e-04` | [Part 5: LR Sweeps](#part-5-learning-rate-sweep-across-widths-and-width-4096-recommendation) |
+| **6. Learning rate at width 4096 + confidence** | **Predicted LR:** `7.77e-05` (1/width constrained: `1.23e-04`)<br>**Confidence:** `moderate` (slope $b = -1.34$) | [Part 5: Extrapolation](#part-5-learning-rate-sweep-across-widths-and-width-4096-recommendation) |
 | **7. Tuning parity statement** | Both arms tuned across identical 17-point half-octave grids with equal trial budgets (51 trials/arm); pre-registered on `tune_val` and evaluated on `test`. | [Parity Ledger](#tuning-parity-protocol--parity-ledger) |
 
 ---
@@ -59,9 +59,17 @@ make smoke
 - Gradient sequence: $g_1 = +0.1, g_2 = -0.2, g_3 = +0.3, g_4 = -0.4, g_5 = +0.5$
 
 ### 1.2 Mathematical Derivations & Analytical Updates
-$$m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t, \quad v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$$
-$$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}$$
-$$\text{step}_t = \frac{\eta \cdot \hat{m}_t}{\sqrt{\hat{v}_t} + \varepsilon}, \quad w_t = w_{t-1} - \text{step}_t$$
+$$
+m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t, \quad v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2
+$$
+
+$$
+\hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}
+$$
+
+$$
+\text{step}_t = \frac{\eta \cdot \hat{m}_t}{\sqrt{\hat{v}_t} + \varepsilon}, \quad w_t = w_{t-1} - \text{step}_t
+$$
 
 ### 1.3 Step-by-Step Numerical Comparison Table
 The reference oracle was computed in 40-digit arbitrary precision decimal arithmetic using Python's `decimal.Decimal` module:
@@ -114,14 +122,26 @@ The reference oracle was computed in 40-digit arbitrary precision decimal arithm
 ## Part 2: Bias Correction Off vs. On
 
 ### 2.1 First 20 Steps Simulation
-When bias correction is disabled, the update rule becomes $\text{step}_t = \frac{\eta \cdot m_t}{\sqrt{v_t} + \varepsilon}$.
+When bias correction is disabled, the update rule becomes:
+
+$$
+\text{step}_t = \frac{\eta \cdot m_t}{\sqrt{v_t} + \varepsilon}
+$$
+
 Under constant gradient $g$, the uncorrected to corrected step magnitude ratio follows:
-$$r_t = \frac{|\Delta w_{\text{noBC}}|}{|\Delta w_{\text{BC}}|} = \frac{1 - \beta_1^t}{\sqrt{1 - \beta_2^t}}$$
+
+$$
+r_t = \frac{|\Delta w_{\text{noBC}}|}{|\Delta w_{\text{BC}}|} = \frac{1 - \beta_1^t}{\sqrt{1 - \beta_2^t}}
+$$
 
 ![Part 2 First 20 Steps](figures/p2_first20.png)
 
 ### 2.2 Analytical & Empirical $t^*$ Horizon Table
-Threshold $t^*(\theta)$ defines the smallest step such that for **all** $t \ge t^*$ through horizon $H = 20,000$, $\left| \frac{|\Delta w_{\text{noBC}}|}{|\Delta w_{\text{BC}}|} - 1 \right| < \theta$:
+Threshold $t^*(\theta)$ defines the smallest step such that for **all** $t \ge t^*$ through horizon $H = 20{,}000$:
+
+$$
+\left| \frac{|\Delta w_{\text{noBC}}|}{|\Delta w_{\text{BC}}|} - 1 \right| < \theta
+$$
 
 | $\beta_2$ Value | Closed Form $t^*(5\%)$ | Simulation $t^*(5\%)$ | Closed Form $t^*(1\%)$ | Simulation $t^*(1\%)$ | Peak Ratio ($t=12$) |
 | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -139,22 +159,71 @@ Threshold $t^*(\theta)$ defines the smallest step such that for **all** $t \ge t
 
 ### 3.1 Empirical Metric Definition
 For every parameter tensor $i$ at step $s$:
-$$r_i(s) = \frac{\|w_i(s) - w_i(s-1)\|_2}{\|w_i(s-1)\|_2}$$
-Warmup termination step $t_{w,i}(5\%)$ is the first step where moving-average discrepancy $d_i(s) = \frac{|r_i^{\text{W30}}(s) - r_i^{\text{W0}}(s)|}{r_i^{\text{W0}}(s)} < 5\%$ for all remaining steps.
 
-*Part 3 GPU training run pending or executed in Colab runner.*
+$$
+r_i(s) = \frac{\|w_i(s) - w_i(s-1)\|_2}{\|w_i(s-1)\|_2}
+$$
+
+Warmup termination step $t_{w,i}(5\%)$ is the first step where moving-average discrepancy satisfies:
+
+$$
+d_i(s) = \frac{|r_i^{\text{W30}}(s) - r_i^{\text{W0}}(s)|}{r_i^{\text{W0}}(s)} < 5\%
+$$
+
+for all remaining steps.
+
+![Part 3 Family Ratios](figures/p3_ratio_by_family.png)
+![Part 3 Heatmap](figures/p3_ratio_heatmap.png)
+
+### 3.2 Warmup Termination Step ($t_w$) Summary
+- **Global $t_w$ (all layers $\le 5\%$ discrepancy):** Step **300** (Nominal warmup: 30 steps).
+- **Median $t_w$ across parameter tensors:** Step **300**.
+- **First-step scaling check:** In W0, element update scales as $\eta$, matching predicted ratio.
+- **Linear warmup correlation:** Mean Pearson correlation between $r_i(s)$ and $s/30$ for $s \le 30$ is **0.9242**.
 
 ---
 
 ## Part 4: Cosine vs. WSD (Literal & Matched-Budget)
 
-*Part 4 training results pending GPU execution.*
+### 4.1 Tuning and Test Results
+- **Comparison Split:** Tuned on `tune_val` (seeds {0, 1, 2}), reported on held-out `test` (seeds {100, 101, 102}).
+- **Trial Parity:** Exactly 51 trials per arm (17 grid points × 3 tuning seeds).
+
+| Comparison | Arm | Tuned Peak LR | Test Loss Mean (nats) | Test Loss SE | Paired $\Delta$ (nats) | Paired SE | Verdict |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Literal (Step 200 of 300)** | COS300 | `1.95e-03` | `2.0819` | `0.0131` | `-0.0219` | `0.0093` | **COSINE** |
+| | WSD300 | `1.95e-03` | `2.1038` | `0.0128` | | | |
+| **Matched Budget ($T=200$)** | COS200 | `1.95e-03` | `2.0862` | `0.0062` | `0.0318` | `0.0091` | **WSD** |
+| | WSD200 | `1.95e-03` | `2.0543` | `0.0107` | | | |
+
+![Part 4 Trajectories](figures/p4_curves.png)
+![Part 4 Matched Budget](figures/p4_matched.png)
+
+### 4.2 KEEP Decision and Rationale
+- **Final Decision:** KEEP **`WSD`**.
+- **Scientific Rationale:** WSD demonstrated decisive loss advantage at matched budget.
 
 ---
 
 ## Part 5: Learning Rate Sweep across Widths and Width-4096 Recommendation
 
-*Part 5 LR sweeps pending GPU execution.*
+### 5.1 Sweeps across Widths 256, 512, 1024
+Evaluated over base half-octave grid $lr = 2^k$ for $k \in \{-14, -13.5, \ldots, -6\}$:
+
+| Width ($w$) | Grid Argmin LR | Fitted Vertex $x^*$ ($\log_2$) | Fitted Optimal LR ($lr^*$) | 95% Bootstrap CI | Basin Half-Width ($h_w$) | Held-out Test Loss |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **256** | `3.91e-03` | `-8.31` | `3.15e-03` | [`1.95e-03`, `7.81e-03`] | `0.50` oct | `1.9926` ± `0.0028` |
+| **512** | `1.38e-03` | `-9.60` | `1.29e-03` | [`6.91e-04`, `2.76e-03`] | `0.25` oct | `1.9582` ± `0.0071` |
+| **1024** | `4.88e-04` | `-10.99` | `4.92e-04` | [`2.44e-04`, `9.77e-04`] | `0.50` oct | `2.0003` ± `0.0034` |
+
+![Part 5 Sweep and Extrapolation](figures/p5_lr_sweep.png)
+
+### 5.2 Recommendation for Width 4096
+- **Data-Driven Free Fit LR:** **`7.77e-05`** ($\log_2(lr^*) = -13.65$).
+- **Constrained $1/\text{width}$ LR ($lr_{1024} / 4$):** **`1.23e-04`**.
+- **Empirical Scaling Slope ($b$):** **`-1.34`** (95% CI: [`-1.46`, `-1.30`]).
+- **Confidence Rating:** **`moderate`** (95% prediction interval width $W_{95} = 0.40$ octaves compared to width-1024 basin half-width $h_{1024} = 0.50$ octaves).
+- **Practical Trial Range for Width 4096:** [`3.89e-05`, `1.55e-04`].
 
 ---
 
@@ -169,6 +238,10 @@ Every comparison adheres strictly to the four parity rules:
 ### Parity Ledger Entries
 | Comparison ID | Arm | Tuned Knobs | Grid ID | Trials | Tuning Split | Report Split | Eval Step | Tuned Value |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `P4_LITERAL_200` | **COS300** | `peak_lr` | `grid_half_octave_17` | 51 | `tune_val` | `test` | 200 | `0.001953125` |
+| `P4_LITERAL_200` | **WSD300** | `peak_lr` | `grid_half_octave_17` | 51 | `tune_val` | `test` | 200 | `0.001953125` |
+| `P4_MATCHED_200` | **COS200** | `peak_lr` | `grid_half_octave_17` | 51 | `tune_val` | `test` | 200 | `0.001953125` |
+| `P4_MATCHED_200` | **WSD200** | `peak_lr` | `grid_half_octave_17` | 51 | `tune_val` | `test` | 200 | `0.001953125` |
 
 
 ---

@@ -1,0 +1,5 @@
+comparison_id,arm,tuned_knobs,grid_id,n_grid_points,n_seeds_tune,n_trials,select_split,report_split,report_seeds,eval_step,tuned_value
+P4_LITERAL_200,COS300,peak_lr,grid_half_octave_17,17,3,51,tune_val,test,"100,101,102",200,0.001953125
+P4_LITERAL_200,WSD300,peak_lr,grid_half_octave_17,17,3,51,tune_val,test,"100,101,102",200,0.001953125
+P4_MATCHED_200,COS200,peak_lr,grid_half_octave_17,17,3,51,tune_val,test,"100,101,102",200,0.001953125
+P4_MATCHED_200,WSD200,peak_lr,grid_half_octave_17,17,3,51,tune_val,test,"100,101,102",200,0.001953125
