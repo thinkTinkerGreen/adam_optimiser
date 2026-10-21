@@ -78,12 +78,16 @@ def run_part3(
 
     seeds = [0, 1, 2]
     total_steps = 300
+    print(
+        f"[Part 3] Starting update-to-weight ratio tracking (peak_lr={peak_lr:.2e}, seeds={seeds}, device={device})..."
+    )
 
     # 1. Run W30 (Warmup 30) and W0 (No Warmup)
     runs_w30 = []
     runs_w0 = []
 
     for s in seeds:
+        print(f"  [Part 3] Running seed {s} (W30 and W0 arms)...")
         spec_w30 = RunSpec(
             experiment="p3_w30",
             width=512,

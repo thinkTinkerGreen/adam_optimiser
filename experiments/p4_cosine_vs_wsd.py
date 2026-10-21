@@ -37,7 +37,13 @@ def tune_peak_lr(
     losses_by_lr: dict[float, list[float]] = {}
     mean_losses: list[float] = []
 
-    for lr in grid:
+    # Use [200, 300] for p5_sweep so that existing Part 5 runs at width 512 are instant cache hits
+    eval_steps = [200, 300] if experiment_name == "p5_sweep" else [eval_step]
+    print(
+        f"[Part 4] Tuning {experiment_name} ({schedule.upper()}, steps={total_steps}, eval_step={eval_step}) across {len(grid)} LRs × {len(tune_seeds)} seeds..."
+    )
+
+    for idx, lr in enumerate(grid, start=1):
         losses_by_lr[lr] = []
         for s in tune_seeds:
             spec = RunSpec(
@@ -51,15 +57,23 @@ def tune_peak_lr(
                 seed=s,
                 device=device,
                 use_synthetic=use_synthetic,
-                eval_steps=[eval_step],
+                eval_steps=eval_steps,
             )
             res = run_training(spec, save_to_disk=True, results_dir=res_dir)
             val_loss = res.eval_losses.get(f"step_{eval_step}_tune_val", 5.0)
             losses_by_lr[lr].append(val_loss)
-        mean_losses.append(float(np.mean(losses_by_lr[lr])))
+        mean_val = float(np.mean(losses_by_lr[lr]))
+        mean_losses.append(mean_val)
+        if idx % 4 == 0 or idx == len(grid):
+            print(
+                f"  [{experiment_name}] Progress: [{idx}/{len(grid)}] lr={lr:.2e} -> mean tune_val loss: {mean_val:.4f}"
+            )
 
     best_idx = int(np.argmin(mean_losses))
     best_lr = grid[best_idx]
+    print(
+        f"[{experiment_name}] Optimal peak LR found: {best_lr:.2e} (min tune_val loss: {mean_losses[best_idx]:.4f})"
+    )
     return best_lr, mean_losses, losses_by_lr
 
 
@@ -80,6 +94,9 @@ def evaluate_on_test(
     res_dir = Path(results_dir)
     report_seeds = [100, 101, 102]
     test_losses = []
+    print(
+        f"[Part 4] Evaluating {experiment_name} on held-out test split with best lr={lr:.2e} across seeds {report_seeds}..."
+    )
 
     for s in report_seeds:
         spec = RunSpec(
